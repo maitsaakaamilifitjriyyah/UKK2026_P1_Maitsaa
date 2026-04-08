@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('assets/favicon.ico') }}">
     <title>Maitsaa</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/simplebar.css') }}">
@@ -16,13 +16,14 @@
     <!-- Date Range Picker CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css') }}">
     <!-- App CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/app-light.css') }}" id="lightTheme" disabled>
-    <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}" id="darkTheme">
+    <link rel="stylesheet" href="{{ asset('assets/css/app-light.css') }}" id="lightTheme">
+    <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}" id="darkTheme" disabled>
   </head>
-  <body class="dark ">
+  <body class="light ">
     <div class="wrapper vh-100">
       <div class="row align-items-center h-100">
-        <form class="col-lg-3 col-md-4 col-10 mx-auto text-center">
+        <form class="col-lg-3 col-md-4 col-10 mx-auto text-center" action="{{ route('login') }}" method="POST">
+          @csrf 
           <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html">
             <svg version="1.1" id="logo" class="navbar-brand-img brand-md" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">
               <g>
@@ -34,19 +35,14 @@
           </a>
           <h1 class="h6 mb-3">Sign in</h1>
           <div class="form-group">
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
+            <label for="email" class="sr-only">Email address</label>
+            <input type="email" id="email" name="email" class="form-control form-control-lg" value="{{ old('email') }}" placeholder="Email address" required="" autofocus="">
           </div>
           <div class="form-group">
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control form-control-lg" placeholder="Password" required="">
-          </div>
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me"> Stay logged in </label>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="Password" required="">
           </div>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Let me in</button>
-          <p class="mt-5 mb-3 text-muted">© 2020</p>
         </form>
       </div>
     </div>
