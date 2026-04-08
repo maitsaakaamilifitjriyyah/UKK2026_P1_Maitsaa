@@ -5,10 +5,10 @@
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <h2 class="page-title">Form Create User</h2>
+                    <h2 class="page-title">Form</h2>
                     <div class="card shadow mb-4">
                         <div class="card-header">
-                            <strong class="card-title">Create New User</strong>
+                            <strong class="card-title">User</strong>
                         </div>
                         @if ($errors->any())
                             <div class="alert alert-danger shadow">
