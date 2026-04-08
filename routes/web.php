@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,11 +25,10 @@ Route::middleware('auth')->group(function () {
 });
 
 // User
-Route::get('/user', function () {
-        return view('user.show');
-    })->name('user.show');
-Route::get('/user/create', function () {
-        return view('user.create');
-    })->name('user.create');
-    
+Route::get('/user', [UserController::class, 'index'])->name('user.show');
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/user', [UserController::class, 'store'])->name('user.store');
+Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
+Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 require __DIR__.'/auth.php';
