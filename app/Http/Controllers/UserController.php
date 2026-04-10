@@ -17,7 +17,7 @@ class UserController extends Controller
         // Menggunakan with('detail') jika ada relasi ke user_details
         $data = User::with('detail')->latest()->get();
         
-        return view('user.show', compact('data'));
+        return view('user.index', compact('data'));
     }
 
     /**
@@ -58,7 +58,7 @@ class UserController extends Controller
             'birth_date' => $validated['birth_date'],
         ]);
 
-        return redirect()->route('user.show')
+        return redirect()->route('user.index')
             ->with('success', 'User berhasil ditambahkan');
     }
 
@@ -111,7 +111,7 @@ class UserController extends Controller
         'birth_date' => $request->birth_date,
         ]);
 
-        return redirect()->route('user.show')
+        return redirect()->route('user.index')
             ->with('success', 'User berhasil diupdate');
     }
 
@@ -128,7 +128,7 @@ class UserController extends Controller
         
         $user->delete();
 
-        return redirect()->route('user.show')
+        return redirect()->route('user.index')
             ->with('success', 'User berhasil dihapus');
     }
 }
