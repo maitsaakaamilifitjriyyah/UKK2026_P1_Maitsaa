@@ -57,33 +57,10 @@
                 </div>
                 <ul class="navbar-nav flex-fill w-100 mb-2">
                     <li class="nav-item dropdown">
-                        <a href="#dashboard" data-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle nav-link">
+                        <a href="{{ route('dashboard') }}" class="nav-link">
                             <i class="fe fe-home fe-16"></i>
                             <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
                         </a>
-                        <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
-                            <li class="nav-item active">
-                                <a class="nav-link pl-3" href="./index.html"><span
-                                        class="ml-1 item-text">Default</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link pl-3" href="./dashboard-analytics.html"><span
-                                        class="ml-1 item-text">Analytics</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link pl-3" href="./dashboard-sales.html"><span
-                                        class="ml-1 item-text">E-commerce</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas
-                                        Dashboard</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link pl-3" href="./dashboard-system.html"><span
-                                        class="ml-1 item-text">Systems</span></a>
-                            </li>
-                        </ul>
                     </li>
                 </ul>
                 <p class="text-muted nav-heading mt-4 mb-1">
@@ -91,14 +68,26 @@
                 </p>
                 <ul class="navbar-nav flex-fill w-100 mb-2">
                     <li class="nav-item w-100">
-                        <a class="nav-link" href="{{ route('user.show') }}">
+                        <a class="nav-link" href="{{ route('user.index') }}">
                             <i class="fe fe-user fe-16"></i>
                             <span class="ml-3 item-text">Users</span>
                         </a>
                     </li>
                     <li class="nav-item w-100">
-                        <a class="nav-link" href="{{ route('item.show') }}">
+                        <a class="nav-link" href="{{ route('category.index') }}">
                             <i class="fe fe-grid fe-16"></i>
+                            <span class="ml-3 item-text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a class="nav-link" href="{{ route('location.index') }}">
+                            <i class="fe fe-globe fe-16"></i>
+                            <span class="ml-3 item-text">Locations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a class="nav-link" href="{{ route('item.index') }}">
+                            <i class="fe fe-archive fe-16"></i>
                             <span class="ml-3 item-text">Items</span>
                         </a>
                     </li>
