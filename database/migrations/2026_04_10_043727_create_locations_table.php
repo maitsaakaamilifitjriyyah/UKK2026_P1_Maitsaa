@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->integer('id')->primary()->autoIncrement();
-            $table->string('name', 255)->comment('Nama kategori alat');
-            $table->text('description')->comment('Deskripsi kategori');
+        Schema::create('locations', function (Blueprint $table) {
+            $table->string('location_code', 10)->primary();
+            $table->string('name', 100)->nullable();
+            $table->string('detail', 100)->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('locations');
     }
 };
