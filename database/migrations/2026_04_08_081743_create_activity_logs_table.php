@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('description')->comment('Penjelasan aksi dalam bahasa natural');
             $table->text('meta')->nullable()->comment('Data konteks tambahan dalam format JSON string. Contoh: ARRAY[\\\\\\\\\"loan_id\\\\\\\\');
             $table->string('ip_address', 45)->nullable()->comment('IP address pelaku aksi');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

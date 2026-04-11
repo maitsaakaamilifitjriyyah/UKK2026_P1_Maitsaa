@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('condition_id')->references('id')->on('unit_conditions');
             $table->date('return_date')->comment('Tanggal aktual alat dikembalikan');
             $table->text('notes')->nullable()->comment('Catatan pengembalian dari Employee');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

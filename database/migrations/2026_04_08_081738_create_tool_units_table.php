@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('status', ["available","nonactive","lent"]);
             $table->text('notes')->comment('Catatan tambahan unit');
             $table->timestamp('created_at');
+            $table->timestamp('updated_at');
         });
 
         Schema::enableForeignKeyConstraints();

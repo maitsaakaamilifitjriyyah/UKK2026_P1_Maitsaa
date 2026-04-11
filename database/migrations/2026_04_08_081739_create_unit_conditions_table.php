@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('return_id')->nullable()->comment('FK ke returns  ,   NULL jika dicatat di luar konteks pengembalian   (  entry awal  ,   maintenance  ,   inspeksi)');
             $table->enum('conditions', ["good","broken","maintenance"]);
             $table->text('notes')->comment('Penjelasan kondisi saat dicatat');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
             $table->timestamp('recorded_at')->comment('Waktu kondisi dicatat. Kondisi terkini = recorded_at paling baru');
         });
 

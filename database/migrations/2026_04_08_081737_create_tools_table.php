@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('code_slug', 15)->required()->unique();
             $table->string('photo_path', 255)->comment('Path foto representatif alat');
             $table->timestamp('created_at');
+            $table->timestamp('updated_at');
         });
 
         Schema::enableForeignKeyConstraints();

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('tool_id')->comment('FK ke tools dimana item_type = bundle_tool');
             $table->foreign('tool_id')->references('id')->on('tools');
             $table->integer('qty')->comment('Jumlah sub-tool ini dalam satu bundle');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();
