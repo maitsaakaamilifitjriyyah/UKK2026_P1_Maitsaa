@@ -90,103 +90,6 @@
                                             <div class="dropdown float-right">
                                                 <button class="btn btn-primary float-right ml-3" type="button"
                                                     data-toggle="modal" data-target="#verticalModal">Add Unit</button>
-                                                <div class="card-body">
-                                                    <div class="modal fade" id="verticalModal" tabindex="-1" role="dialog"
-                                                        aria-labelledby="verticalModalTitle" aria-hidden="true"
-                                                        style="display: none;">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="verticalModalTitle">Form
-                                                                        Unit</h5>
-                                                                    <button type="button" class="close"
-                                                                        data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">×</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form action="{{ route('unit.store') }}" method="POST"
-                                                                    enctype="multipart/form-data">
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
-                                                                            <div class="col-md-6">
-                                                                                @csrf
-                                                                                @if (isset($unit))
-                                                                                    @method('PUT')
-                                                                                @endif
-                                                                                <div class="form-group mb-3">
-                                                                                    <input type="hidden" name="tool_id"
-                                                                                        value="{{ $item->id }}">
-                                                                                    <label for="simpleinput">Code</label>
-                                                                                    <input type="text" name="code"
-                                                                                        class="form-control"
-                                                                                        value="{{ $item->code_slug }}-{{ str_pad($item->units->count() + 1, 3, '0', STR_PAD_LEFT) }}"
-                                                                                        readonly>
-                                                                                </div>
-                                                                                <div class="form-group mb-3">
-                                                                                    <label
-                                                                                        for="custom-select">Status</label>
-                                                                                    <select name="status"
-                                                                                        class="form-control" required>
-                                                                                        <option value="">-- Select
-                                                                                            Status --</option>
-                                                                                        <option value="available"
-                                                                                            {{ old('status', $unit->status ?? '') == 'available' ? 'selected' : '' }}>
-                                                                                            Available</option>
-                                                                                        <option value="nonactive"
-                                                                                            {{ old('status', $unit->status ?? '') == 'nonactive' ? 'selected' : '' }}>
-                                                                                            Unavailable</option>
-                                                                                        <option value="lent"
-                                                                                            {{ old('status', $unit->status ?? '') == 'lent' ? 'selected' : '' }}>
-                                                                                            Lent</option>
-                                                                                    </select>
-                                                                                    @error('status')
-                                                                                        <div class="text-danger mt-1">
-                                                                                            {{ $message }}</div>
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div> <!-- /.col -->
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group mb-3">
-                                                                                    <label
-                                                                                        for="custom-select">Condition</label>
-                                                                                    <select name="conditions"
-                                                                                        class="form-control" required>
-                                                                                        <option value="">-- Select
-                                                                                            Condition --</option>
-                                                                                        <option value="good"
-                                                                                            {{ old('condition', $unit->condition->conditions ?? '') == 'good' ? 'selected' : '' }}>
-                                                                                            Good</option>
-                                                                                        <option value="broken"
-                                                                                            {{ old('condition', $unit->condition->conditions ?? '') == 'broken' ? 'selected' : '' }}>
-                                                                                            Broken</option>
-                                                                                        <option value="maintenance"
-                                                                                            {{ old('condition', $unit->condition->conditions ?? '') == 'maintenance' ? 'selected' : '' }}>
-                                                                                            Maintenance</option>
-                                                                                    </select>
-                                                                                    @error('condition')
-                                                                                        <div class="text-danger mt-1">
-                                                                                            {{ $message }}</div>
-                                                                                    @enderror
-                                                                                </div>
-                                                                                <div class="form-group mb-3">
-                                                                                    <label for="simpleinput">Notes</label>
-                                                                                    <input type="text" name="notes"
-                                                                                        class="form-control"
-                                                                                        value="{{ old('notes', $unit->notes ?? '') }}"
-                                                                                        placeholder="Add notes">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="submit"
-                                                                            class="btn mb-2 btn-primary">Add Unit</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -211,15 +114,25 @@
                                                     <td>
                                                         @if ($unit->status == 'available')
                                                             <span class="badge badge-success">Available</span>
-                                                        @elseif ($unit->status == 'borrowed')
-                                                            <span class="badge badge-danger">Borrowed</span>
-                                                        @elseif ($unit->status == 'maintenance')
+                                                        @elseif ($unit->status == 'nonactive')
+                                                            <span class="badge badge-danger">Non-Active</span>
+                                                        @elseif ($unit->status == 'lent')
+                                                            <span class="badge badge-warning">Lent</span>
+                                                        @else
+                                                            <span class="badge badge-secondary">Unknown</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($unit->condition->conditions == 'good')
+                                                            <span class="badge badge-success">Good</span>
+                                                        @elseif ($unit->condition->conditions == 'broken')
+                                                            <span class="badge badge-danger">Broken</span>
+                                                        @elseif ($unit->condition->conditions == 'maintenance')
                                                             <span class="badge badge-warning">Maintenance</span>
                                                         @else
                                                             <span class="badge badge-secondary">Unknown</span>
                                                         @endif
                                                     </td>
-                                                    <td>{{ ucfirst($unit->condition->conditions ?? '-') }}</td>
                                                     <td>{{ $unit->notes ?? '-' }}</td>
                                                     <td><button class="btn btn-sm dropdown-toggle more-horizontal"
                                                             type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -227,11 +140,10 @@
                                                             <span class="text-muted sr-only">Action</span>
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" data-toggle="modal"
-                                                                data-target="#editModal" data-code="{{ $unit->code }}"
-                                                                data-status="{{ $unit->status }}"
-                                                                data-conditions="{{ $unit->condition->conditions ?? '' }}"
-                                                                data-notes="{{ $unit->notes ?? '' }}">Edit</a>
+                                                            <a class="dropdown-item" href="#"
+                                                                onclick="openEditModal('{{ $unit->code }}', '{{ $unit->status }}', '{{ $unit->condition->conditions ?? '' }}', '{{ $unit->notes ?? '' }}')">
+                                                                Edit
+                                                            </a>
                                                             <a class="dropdown-item" href="#"
                                                                 onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this unit?')) { document.getElementById('delete-form-{{ $unit->code }}').submit(); }">
                                                                 Delete
@@ -280,7 +192,7 @@
             </div> <!-- .container-fluid -->
     </main>
     <div class="card-body">
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="verticalModalTitle"
+        <div class="modal fade" id="verticalModal" tabindex="-1" role="dialog" aria-labelledby="verticalModalTitle"
             aria-hidden="true" style="display: none;">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -291,14 +203,11 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form action="{{ route('unit.update', $unit->code) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('unit.store') }}" method="POST" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     @csrf
-                                    @if (isset($unit))
-                                        @method('PUT')
-                                    @endif
                                     <div class="form-group mb-3">
                                         <input type="hidden" name="tool_id" value="{{ $item->id }}">
                                         <label for="simpleinput">Code</label>
@@ -309,75 +218,107 @@
                                     <div class="form-group mb-3">
                                         <label for="custom-select">Status</label>
                                         <select name="status" class="form-control" required>
-                                            <option value="">
-                                                -- Select
-                                                Status --</option>
-                                            <option value="available"
-                                                {{ old('status', $unit->status ?? '') == 'available' ? 'selected' : '' }}>
-                                                Available</option>
-                                            <option value="nonactive"
-                                                {{ old('status', $unit->status ?? '') == 'nonactive' ? 'selected' : '' }}>
-                                                Unavailable</option>
-                                            <option value="lent"
-                                                {{ old('status', $unit->status ?? '') == 'lent' ? 'selected' : '' }}>
-                                                Lent</option>
+                                            <option value="">-- Select Status --</option>
+                                            <option value="available">Available</option>
+                                            <option value="nonactive">Unavailable</option>
+                                            <option value="lent">Lent</option>
                                         </select>
                                         @error('status')
-                                            <div class="text-danger mt-1">
-                                                {{ $message }}
-                                            </div>
+                                            <div class="text-danger mt-1">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div> <!-- /.col -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="custom-select">Condition</label>
-                                        <select name="conditions" class="form-control" required>
-                                            <option value="">
-                                                -- Select
-                                                Condition --
-                                            </option>
-                                            <option value="good"
-                                                {{ old('condition', $unit->condition->conditions ?? '') == 'good' ? 'selected' : '' }}>
-                                                Good</option>
-                                            <option value="broken"
-                                                {{ old('condition', $unit->condition->conditions ?? '') == 'broken' ? 'selected' : '' }}>
-                                                Broken</option>
-                                            <option value="maintenance"
-                                                {{ old('condition', $unit->condition->conditions ?? '') == 'maintenance' ? 'selected' : '' }}>
-                                                Maintenance</option>
+                                        <select id="editConditions" name="conditions" class="form-control" required>
+                                            <option value="">-- Select Condition --</option>
+                                            <option value="good">Good</option>
+                                            <option value="broken">Broken</option>
+                                            <option value="maintenance">Maintenance</option>
                                         </select>
                                         @error('condition')
                                             <div class="text-danger mt-1">
-                                                {{ $message }}
-                                            </div>
+                                                {{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="simpleinput">Notes</label>
-                                        <input type="text" name="notes" class="form-control"
-                                            value="{{ old('notes', $unit->notes ?? '') }}" placeholder="Add notes">
+                                        <input type="text" name="notes" class="form-control" placeholder="Add notes">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn mb-2 btn-primary">Edit
-                                Unit</button>
+                            <button type="submit" class="btn mb-2 btn-primary">Add Unit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Unit</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form id="editForm" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label>Code</label>
+                                    <input type="text" id="editCode" name="code" class="form-control" readonly>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Status</label>
+                                    <select id="editStatus" name="status" class="form-control" required>
+                                        <option value="">-- Select Status --</option>
+                                        <option value="available">Available</option>
+                                        <option value="nonactive">Unavailable</option>
+                                        <option value="lent">Lent</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label>Condition</label>
+                                    <select id="editConditions" name="conditions" class="form-control" required>
+                                        <option value="">-- Select Condition --</option>
+                                        <option value="good">Good</option>
+                                        <option value="broken">Broken</option>
+                                        <option value="maintenance">Maintenance</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Notes</label>
+                                    <input type="text" id="editNotes" name="notes" class="form-control"
+                                        placeholder="Add notes">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Update Unit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script>
-    $('#editModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        $('#editCode').val(button.data('code'));
-        $('#editStatus').val(button.data('status'));
-        $('#editConditions').val(button.data('conditions'));
-        $('#editNotes').val(button.data('notes'));
-        $('#editForm').attr('action', '/unit/' + button.data('code'));
-    });
+        function openEditModal(code, status, conditions, notes) {
+            $('#editCode').val(code);
+            $('#editStatus').val(status);
+            $('#editConditions').val(conditions);
+            $('#editNotes').val(notes);
+            $('#editForm').attr('action', '/unit/' + code);
+            $('#editModal').modal('show');
+        }
     </script>
 @endsection

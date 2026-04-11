@@ -14,7 +14,7 @@ class UnitController extends Controller
     {
         $request->validate([
             'tool_id' => 'required|exists:tools,id',
-            'status' => 'required|in:available,borrowed,maintenance,damaged',
+            'status' => 'required|in:available,nonactive,lent',
             'notes' => 'nullable|string'
         ]);
 
@@ -83,7 +83,7 @@ class UnitController extends Controller
                 'id'          => Str::uuid(),
                 'unit_code'   => $unit->code,
                 'conditions'  => $request->conditions,
-                'notes'       => $request->condition_notes,
+                'notes'       => $request->notes,
                 'recorded_at' => now(),
             ]);
         }
