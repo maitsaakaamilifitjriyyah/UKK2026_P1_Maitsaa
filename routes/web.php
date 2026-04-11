@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -52,11 +53,18 @@ Route::put('/location/{id}', [LocationController::class, 'update'])->name('locat
 Route::delete('/location/{id}', [LocationController::class, 'destroy'])->name('location.destroy');
 
 // Item
-// Route::get('/item', [ItemController::class, 'index'])->name('item.index');
-// Route::get('/item/create', [ItemController::class, 'create'])->name('item.create');
-// Route::post('/item', [ItemController::class, 'store'])->name('item.store');
-// Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->name('item.edit');
-// Route::put('/item/{id}', [ItemController::class, 'update'])->name('item.update');
-// Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('item.destroy');
-// Route::get('/item/{id}', [ItemController::class, 'detail'])->name('item.detail');
+Route::get('/item', [ItemController::class, 'index'])->name('item.index');
+Route::get('/item/create', [ItemController::class, 'create'])->name('item.create');
+Route::post('/item', [ItemController::class, 'store'])->name('item.store');
+Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->name('item.edit');
+Route::put('/item/{id}', [ItemController::class, 'update'])->name('item.update');
+Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('item.destroy');
+Route::get('/item/{id}', [ItemController::class, 'detail'])->name('item.detail');
+
+// Unit
+Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
+Route::get('/unit/{code}', [UnitController::class, 'edit'])->name('unit.edit');
+Route::put('/unit/{code}', [UnitController::class, 'update'])->name('unit.update');
+Route::delete('/unit/{code}', [UnitController::class, 'destroy'])->name('unit.destroy');
+
 require __DIR__.'/auth.php';
