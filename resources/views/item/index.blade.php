@@ -44,6 +44,7 @@
                                                 <th>Picture</th>
                                                 <th>Code</th>
                                                 <th>Name</th>
+                                                <th>Price</th>
                                                 <th>Category</th>
                                                 <th>Type</th>
                                                 <th>Location</th>
@@ -56,6 +57,7 @@
                                                     <td><img src="{{ asset('storage/' . $item->photo_path) }}" alt="Item Image" style="max-width: 100px; max-height: 100px;"></td>
                                                     <td>{{ $item->code_slug ?? '-' }}</td>
                                                     <td>{{ $item->name ?? '-' }}</td>
+                                                    <td>{{ $item->price ? 'Rp ' . number_format($item->price, 0, ',', '.') : '-' }}</td>
                                                     <td>{{ $item->category->name ?? '-' }}</td>
                                                     <td>{{ $item->item_type ?? '-' }}</td>
                                                     <td>{{ $item->location->name . ' - ' . $item->location->detail ?? '-' }}</td>

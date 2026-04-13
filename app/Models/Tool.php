@@ -14,6 +14,7 @@ class Tool extends Model
         'name',
         'item_type',
         'status',
+        'price',
         'description',
         'code_slug',
         'photo_path',
@@ -23,6 +24,7 @@ class Tool extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
     public function location()
     {
         return $this->belongsTo(Location::class, 'location_code', 'location_code');
@@ -31,5 +33,10 @@ class Tool extends Model
     public function units()
     {
         return $this->hasMany(ToolUnit::class, 'tool_id', 'id');
+    }
+
+    public function bundleTools()
+    {
+        return $this->hasMany(BundleTool::class, 'tool_id', 'id');
     }
 }
