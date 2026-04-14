@@ -134,28 +134,6 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $unit->notes ?? '-' }}</td>
-                                                    <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                            type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false">
-                                                            <span class="text-muted sr-only">Action</span>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"
-                                                                onclick="openEditModal('{{ $unit->code }}', '{{ $unit->status }}', '{{ $unit->condition->conditions ?? '' }}', '{{ $unit->notes ?? '' }}')">
-                                                                Edit
-                                                            </a>
-                                                            <a class="dropdown-item" href="#"
-                                                                onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this unit?')) { document.getElementById('delete-form-{{ $unit->code }}').submit(); }">
-                                                                Delete
-                                                            </a>
-                                                            <form id="delete-form-{{ $unit->code }}"
-                                                                action="{{ route('unit.destroy', $unit->code) }}"
-                                                                method="POST" style="display: none;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        </div>
-                                                    </td>
                                                 </tr>
                                             @empty
                                                 <tr>
