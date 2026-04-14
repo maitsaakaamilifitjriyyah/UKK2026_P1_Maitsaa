@@ -44,6 +44,7 @@
         display: none;
     }
 }
+</style>
     <main role="main" class="main-content">
         <div class="container-fluid">
             <div class="row justify-content-center">
