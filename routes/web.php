@@ -8,19 +8,32 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\LoanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
 })->name('welcome');
 
+
+Route::get('/dashboard', function () {
+    $role = strtolower(auth()->user()->role);
+
+    if ($role == 'admin') {
+        return view('dashboard');
+    } elseif ($role == 'employee') {
+        return view('dashboard');
+    } elseif ($role == 'user') {
+        return redirect()->route('item.index');
+    }
+
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -67,4 +80,11 @@ Route::get('/unit/{code}', [UnitController::class, 'edit'])->name('unit.edit');
 Route::put('/unit/{code}', [UnitController::class, 'update'])->name('unit.update');
 Route::delete('/unit/{code}', [UnitController::class, 'destroy'])->name('unit.destroy');
 
+// Peminjaman
+Route::get('/loan', [LoanController::class, 'index'])->name('loan.index');
+Route::get('/loan/create', [LoanController::class, 'create'])->name('loan.create');
+Route::post('/loan', [LoanController::class, 'store'])->name('loan.store');
+Route::put('/loan/{id}/approve', [LoanController::class, 'approve'])->name('loan.approve');
+Route::put('/loan/{id}/reject',  [LoanController::class, 'reject'])->name('loan.reject');
+Route::delete('/loan/{id}',      [LoanController::class, 'destroy'])->name('loan.destroy');
 require __DIR__.'/auth.php';

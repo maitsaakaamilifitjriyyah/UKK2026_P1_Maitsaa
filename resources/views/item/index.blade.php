@@ -1,6 +1,49 @@
 @extends('menu/navbar')
 
 @section('content')
+<style>
+    @media print {
+    /* Sembunyikan semua kecuali tabel */
+    body * {
+        visibility: hidden;
+    }
+
+    .card, .card * {
+        visibility: visible;
+    }
+
+    .card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    /* Sembunyikan tombol action & toolbar saat print */
+    .toolbar,
+    .dropdown,
+    nav[aria-label="Table Paging"],
+    .btn {
+        display: none !important;
+    }
+
+    /* Supaya tabel kelihatan bordernya saat print */
+    table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+
+    table th, table td {
+        border: 1px solid #000 !important;
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+    }
+
+    /* Sembunyikan kolom gambar saat print (opsional) */
+    th:first-child, td:first-child {
+        display: none;
+    }
+}
     <main role="main" class="main-content">
         <div class="container-fluid">
             <div class="row justify-content-center">
@@ -26,12 +69,11 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-auto">
-                                                    <label for="search" class="sr-only">Search</label>
-                                                    <input type="text" class="form-control" id="search1" value=""
-                                                        placeholder="Search">
-                                                </div>
-                                                <div class="form-group col-auto">
-                                                    <a href="{{ route('item.create') }}" class="btn mb-2 btn-secondary">New
+                                                    <button type="button" class="btn mb-2 btn-secondary"
+                                                        onclick="printTable()">
+                                                        Print <span class="fe fe-download fe-16"></span>
+                                                    </button>
+                                                    <a href="{{ route('item.create') }}" class="btn mb-2 btn-primary">New
                                                         Item</a>
                                                 </div>
                                             </div>
@@ -54,13 +96,17 @@
                                         <tbody>
                                             @forelse($data as $item)
                                                 <tr>
-                                                    <td><img src="{{ asset('storage/' . $item->photo_path) }}" alt="Item Image" style="max-width: 100px; max-height: 100px;"></td>
+                                                    <td><img src="{{ asset('storage/' . $item->photo_path) }}"
+                                                            alt="Item Image" style="max-width: 100px; max-height: 100px;">
+                                                    </td>
                                                     <td>{{ $item->code_slug ?? '-' }}</td>
                                                     <td>{{ $item->name ?? '-' }}</td>
-                                                    <td>{{ $item->price ? 'Rp ' . number_format($item->price, 0, ',', '.') : '-' }}</td>
+                                                    <td>{{ $item->price ? 'Rp ' . number_format($item->price, 0, ',', '.') : '-' }}
+                                                    </td>
                                                     <td>{{ $item->category->name ?? '-' }}</td>
                                                     <td>{{ $item->item_type ?? '-' }}</td>
-                                                    <td>{{ $item->location->name . ' - ' . $item->location->detail ?? '-' }}</td>
+                                                    <td>{{ $item->location->name . ' - ' . $item->location->detail ?? '-' }}
+                                                    </td>
                                                     <td><button class="btn btn-sm dropdown-toggle more-horizontal"
                                                             type="button" data-toggle="dropdown" aria-haspopup="true"
                                                             aria-expanded="false">
@@ -110,4 +156,9 @@
             </div> <!-- .row -->
         </div> <!-- .container-fluid -->
     </main> <!-- main -->
+<script>
+    function printTable() {
+        window.print();
+    }
+</script>
 @endsection

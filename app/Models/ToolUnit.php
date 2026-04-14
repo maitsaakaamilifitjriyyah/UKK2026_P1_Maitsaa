@@ -29,4 +29,10 @@ class ToolUnit extends Model
     {
         return $this->hasOne(UnitCondition::class, 'unit_code', 'code');
     }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class, 'tool_unit_id', 'code');
+    }
+
 }

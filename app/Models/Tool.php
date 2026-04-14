@@ -39,4 +39,9 @@ class Tool extends Model
     {
         return $this->hasMany(BundleTool::class, 'tool_id', 'id');
     }
+
+    public function loans()
+    {
+        return $this->hasManyThrough(Loan::class, ToolUnit::class, 'tool_id', 'tool_unit_id', 'id', 'id');
+    }
 }
