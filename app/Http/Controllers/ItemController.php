@@ -13,10 +13,11 @@ class ItemController extends Controller
 {
     public function index()
     {
+        $role = strtolower(auth()->user()->role);
         $data = Tool::with('category', 'location', 'bundleTools')
             ->where('item_type', '!=', 'bundle_tool') // ← tambah ini
             ->get();
-        return view('item.index', compact('data'));
+        return view('item.index', compact('data', 'role'));
     }
 
     public function create()
@@ -24,7 +25,7 @@ class ItemController extends Controller
         $category = Category::all();
         $location = Location::all();
         $items    = Tool::where('item_type', 'single')->get();
-        return view('item.create', compact('category', 'location', 'items'));
+        return view('item.create', compact('category', 'location', 'items', 'role'));
     }
 
     public function store(Request $request)
@@ -161,7 +162,8 @@ class ItemController extends Controller
 
     public function detail($id)
     {
+        $role = strtolower(auth()->user()->role);
         $item = Tool::with('category', 'location', 'units.condition')->findOrFail($id);
-        return view('item.detail', compact('item'));
+        return view('item.detail', compact('item', 'role'));
     }
 }
