@@ -96,6 +96,12 @@
                                     <span class="ml-3 item-text">Items</span>
                                 </a>
                             </li>
+                            <li class="nav-item w-100">
+                                <a class="nav-link" href="{{ route('loan.index') }}">
+                                    <i class="fe fe-16 fe-layers"></i>
+                                    <span class="ml-3 item-text">Loan</span>
+                                </a>
+                            </li>
                         </ul>
                     @endif
 
@@ -109,7 +115,7 @@
                             </li>
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('loan.index') }}">
-                                    <i class="fe fe-user fe-16"></i>
+                                    <i class="fe fe-16 fe-layers"></i>
                                     <span class="ml-3 item-text">Loan</span>
                                 </a>
                             </li>
@@ -132,7 +138,7 @@
                         <ul class="navbar-nav flex-fill w-100 mb-2">
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('loan.index') }}">
-                                    <i class="fe fe-user fe-16"></i>
+                                    <i class="fe fe-16 fe-layers"></i>
                                     <span class="ml-3 item-text">Loan</span>
                                 </a>
                             </li>
