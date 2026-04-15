@@ -15,15 +15,6 @@
                                         <form class="form">
                                             <div class="form-row">
                                                 <div class="form-group col-auto mr-auto">
-                                                    <label class="my-1 mr-2 sr-only"
-                                                        for="inlineFormCustomSelectPref1">Show</label>
-                                                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelectPref1">
-                                                        <option value="">...</option>
-                                                        <option value="1">12</option>
-                                                        <option value="2" selected>32</option>
-                                                        <option value="3">64</option>
-                                                        <option value="3">128</option>
-                                                    </select>
                                                 </div>
                                                 <div class="form-group col-auto">
                                                     <label for="search" class="sr-only">Search</label>

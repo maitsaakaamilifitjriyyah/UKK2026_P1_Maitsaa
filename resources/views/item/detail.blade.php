@@ -85,6 +85,7 @@
                         <div class="col-md-12 my-4">
                             <div class="card shadow">
                                 <div class="card-body">
+                                    @if($role == 'admin')
                                     <div class="toolbar row mb-3">
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
@@ -93,6 +94,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     <!-- table -->
                                     <table class="table table-bordered">
@@ -103,7 +105,9 @@
                                                 <th>Status</th>
                                                 <th>Condition</th>
                                                 <th>Notes</th>
+                                                @if ($role == 'admin')
                                                 <th>Action</th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -134,6 +138,7 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $unit->notes ?? '-' }}</td>
+                                                    @if ($role == 'admin')
                                                     <td><button class="btn btn-sm dropdown-toggle more-horizontal"
                                                             type="button" data-toggle="dropdown" aria-haspopup="true"
                                                             aria-expanded="false">
@@ -156,6 +161,7 @@
                                                             </form>
                                                         </div>
                                                     </td>
+                                                    @endif
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -164,24 +170,6 @@
                                                     </td>
                                                 </tr>
                                             @endforelse
-                                            <tr>
-                                                <td><span class="badge badge-warning">Pending</span></td>
-                                            </tr>
-                                            <tr role="group" class="bg-light">
-                                                <td colspan="10"><strong>Shipped</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="badge badge-success">Success</span></td>
-                                            </tr>
-                                            <tr role="group" class="bg-light">
-                                                <td colspan="10"><strong>Return</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="badge badge-danger">Hold</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="badge badge-primary">Processing</span></td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

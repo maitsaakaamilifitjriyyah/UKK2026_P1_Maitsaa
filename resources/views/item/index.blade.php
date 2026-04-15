@@ -1,50 +1,54 @@
 @extends('menu/navbar')
 
 @section('content')
-<style>
-    @media print {
-    /* Sembunyikan semua kecuali tabel */
-    body * {
-        visibility: hidden;
-    }
+    <style>
+        @media print {
 
-    .card, .card * {
-        visibility: visible;
-    }
+            /* Sembunyikan semua kecuali tabel */
+            body * {
+                visibility: hidden;
+            }
 
-    .card {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
+            .card,
+            .card * {
+                visibility: visible;
+            }
 
-    /* Sembunyikan tombol action & toolbar saat print */
-    .toolbar,
-    .dropdown,
-    nav[aria-label="Table Paging"],
-    .btn {
-        display: none !important;
-    }
+            .card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
 
-    /* Supaya tabel kelihatan bordernya saat print */
-    table {
-        border-collapse: collapse !important;
-        width: 100% !important;
-    }
+            /* Sembunyikan tombol action & toolbar saat print */
+            .toolbar,
+            .dropdown,
+            nav[aria-label="Table Paging"],
+            .btn {
+                display: none !important;
+            }
 
-    table th, table td {
-        border: 1px solid #000 !important;
-        padding: 6px 10px !important;
-        font-size: 12px !important;
-    }
+            /* Supaya tabel kelihatan bordernya saat print */
+            table {
+                border-collapse: collapse !important;
+                width: 100% !important;
+            }
 
-    /* Sembunyikan kolom gambar saat print (opsional) */
-    th:first-child, td:first-child {
-        display: none;
-    }
-}
-</style>
+            table th,
+            table td {
+                border: 1px solid #000 !important;
+                padding: 6px 10px !important;
+                font-size: 12px !important;
+            }
+
+            /* Sembunyikan kolom gambar saat print (opsional) */
+            th:first-child,
+            td:first-child {
+                display: none;
+            }
+        }
+    </style>
     <main role="main" class="main-content">
         <div class="container-fluid">
             <div class="row justify-content-center">
@@ -59,24 +63,18 @@
                                         <form class="form">
                                             <div class="form-row">
                                                 <div class="form-group col-auto mr-auto">
-                                                    <label class="my-1 mr-2 sr-only"
-                                                        for="inlineFormCustomSelectPref1">Show</label>
-                                                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelectPref1">
-                                                        <option value="">...</option>
-                                                        <option value="1">12</option>
-                                                        <option value="2" selected>32</option>
-                                                        <option value="3">64</option>
-                                                        <option value="3">128</option>
-                                                    </select>
                                                 </div>
-                                                <div class="form-group col-auto">
-                                                    <button type="button" class="btn mb-2 btn-secondary"
-                                                        onclick="printTable()">
-                                                        Print <span class="fe fe-download fe-16"></span>
-                                                    </button>
-                                                    <a href="{{ route('item.create') }}" class="btn mb-2 btn-primary">New
-                                                        Item</a>
-                                                </div>
+                                                @if ($role == 'admin')
+                                                    <div class="form-group col-auto">
+                                                        <button type="button" class="btn mb-2 btn-secondary"
+                                                            onclick="printTable()">
+                                                            Print <span class="fe fe-download fe-16"></span>
+                                                        </button>
+                                                        <a href="{{ route('item.create') }}"
+                                                            class="btn mb-2 btn-primary">New
+                                                            Item</a>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </form>
                                     </div>
@@ -116,18 +114,20 @@
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                             <a class="dropdown-item"
                                                                 href="{{ route('item.detail', $item->id) }}">Detail</a>
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('item.edit', $item->id) }}">Edit</a>
-                                                            <a class="dropdown-item" href="#"
-                                                                onclick="event.preventDefault(); if(confirm('Are you sure?')) { document.getElementById('delete-form-{{ $item->id }}').submit(); }">
-                                                                Delete
-                                                            </a>
-                                                            <form id="delete-form-{{ $item->id }}"
-                                                                action="{{ route('item.destroy', $item->id) }}"
-                                                                method="POST" style="display: none;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
+                                                            @if ($role == 'admin')
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('item.edit', $item->id) }}">Edit</a>
+                                                                <a class="dropdown-item" href="#"
+                                                                    onclick="event.preventDefault(); if(confirm('Are you sure?')) { document.getElementById('delete-form-{{ $item->id }}').submit(); }">
+                                                                    Delete
+                                                                </a>
+                                                                <form id="delete-form-{{ $item->id }}"
+                                                                    action="{{ route('item.destroy', $item->id) }}"
+                                                                    method="POST" style="display: none;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                </form>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -157,9 +157,9 @@
             </div> <!-- .row -->
         </div> <!-- .container-fluid -->
     </main> <!-- main -->
-<script>
-    function printTable() {
-        window.print();
-    }
-</script>
+    <script>
+        function printTable() {
+            window.print();
+        }
+    </script>
 @endsection
