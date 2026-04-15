@@ -25,7 +25,7 @@ class ItemController extends Controller
         $category = Category::all();
         $location = Location::all();
         $items    = Tool::where('item_type', 'single')->get();
-        return view('item.create', compact('category', 'location', 'items', 'role'));
+        return view('item.create', compact('category', 'location', 'items'));
     }
 
     public function store(Request $request)

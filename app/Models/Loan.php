@@ -17,6 +17,7 @@ class Loan extends Model
         'loan_date',
         'due_date',
         'purpose',
+        'notes',
     ];
 
     public function user()

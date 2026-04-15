@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $role = strtolower(auth()->user()->role);
+        $role = strtolower(auth()->User()->role);
 
         if($role == 'User') {
             return redirect()->route('item.index');

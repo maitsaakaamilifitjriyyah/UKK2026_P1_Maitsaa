@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('condition_id', 255)->comment('FK ke unit_conditions  ,   kondisi alat saat dikembalikan');
             $table->foreign('condition_id')->references('id')->on('unit_conditions');
             $table->date('return_date')->comment('Tanggal aktual alat dikembalikan');
+            $table->string('path_photo')->nullable()->comment('Foto kondisi alat saat dikembalikan');
             $table->text('notes')->nullable()->comment('Catatan pengembalian dari Employee');
             $table->timestamps();
         });

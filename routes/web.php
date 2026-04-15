@@ -84,7 +84,10 @@ Route::delete('/unit/{code}', [UnitController::class, 'destroy'])->name('unit.de
 Route::get('/loan', [LoanController::class, 'index'])->name('loan.index');
 Route::get('/loan/create', [LoanController::class, 'create'])->name('loan.create');
 Route::post('/loan', [LoanController::class, 'store'])->name('loan.store');
+Route::get('/loan/{id}/edit', [LoanController::class, 'edit'])->name('loan.edit');
+Route::put('/loan/{id}', [LoanController::class, 'update'])->name('loan.update');
 Route::put('/loan/{id}/approve', [LoanController::class, 'approve'])->name('loan.approve');
-Route::put('/loan/{id}/reject',  [LoanController::class, 'reject'])->name('loan.reject');
-Route::delete('/loan/{id}',      [LoanController::class, 'destroy'])->name('loan.destroy');
+Route::put('/loan/{id}/reject', [LoanController::class, 'reject'])->name('loan.reject');
+Route::put('/loan/{id}/return', [LoanController::class, 'return'])->name('loan.return');
+Route::delete('/loan/{id}', [LoanController::class, 'destroy'])->name('loan.destroy');
 require __DIR__.'/auth.php';
