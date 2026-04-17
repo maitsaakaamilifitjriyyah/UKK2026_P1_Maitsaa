@@ -14,6 +14,9 @@ class UnitCondition extends Model
 
     public $timestamps = true;
 
+    const UPDATED_AT = 'updated_at';
+    const CREATED_AT = 'created_at';
+
     protected $fillable = [
         'id',
         'unit_code',
@@ -23,8 +26,15 @@ class UnitCondition extends Model
         'recorded_at',
     ];
 
+    // Relasi ke ToolUnit (FK = unit_code)
     public function unit()
     {
-        return $this->belongsTo(ToolUnit::class, 'unit_id', 'id');
+        return $this->belongsTo(ToolUnit::class, 'unit_code', 'code');
+    }
+
+    // Relasi ke Returns
+    public function returnRecord()
+    {
+        return $this->belongsTo(Returns::class, 'return_id', 'id');
     }
 }

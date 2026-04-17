@@ -191,7 +191,6 @@
                                                         <th>Status</th>
                                                         <th>Purpose</th>
                                                         <th>Loan Date</th>
-                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -376,7 +375,7 @@
 
     {{-- modal retun (employee) --}}
     <div class="card-body">
-        <div class="modal fade" id="acceptLoanModal" tabindex="-1" role="dialog" aria-labelledby="verticalModalTitle"
+        <div class="modal fade" id="returnLoanModal" tabindex="-1" role="dialog" aria-labelledby="verticalModalTitle"
             aria-hidden="true" style="display: none;">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">

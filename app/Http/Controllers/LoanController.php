@@ -6,20 +6,41 @@ use Illuminate\Http\Request;
 use App\Models\Loan;
 use App\Models\Tool;
 use App\Models\ToolUnit;
+use App\Models\Returns;
+use Carbon\Carbon;
 
 class LoanController extends Controller
 {
     public function index()
     {
-        $role     = strtolower(auth()->user()->role);
-        $pending  = Loan::where('status', 'pending')->get();
-        $active   = Loan::where('status', 'active')->get();
-        $rejected = Loan::where('status', 'rejected')->get();
+        $role   = strtolower(auth()->user()->role);
+        $userId = auth()->id();
+
+        if ($role === 'user') {
+            $pending  = Loan::where('status', 'pending')->where('user_id', $userId)->get();
+            $active   = Loan::where('status', 'active')->where('user_id', $userId)->get();
+
+            // Rejected yang BELUM lewat 2 hari → masih tampil di loan
+            $rejected = Loan::where('status', 'rejected')
+                ->where('user_id', $userId)
+                ->where('updated_at', '>=', Carbon::now()->subDays(2))
+                ->get();
+        } else {
+            $pending  = Loan::with(['user', 'item', 'toolUnit'])->where('status', 'pending')->get();
+            $active   = Loan::with(['user', 'item', 'toolUnit'])->where('status', 'active')->get();
+
+            // Rejected yang BELUM lewat 2 hari
+            $rejected = Loan::with(['user', 'item', 'toolUnit'])
+                ->where('status', 'rejected')
+                ->where('updated_at', '>=', Carbon::now()->subDays(2))
+                ->get();
+        }
+
         $items = Tool::with(['units' => function ($q) {
-            $q->whereIn('status', ['available', 'maintenance', 'broken']);
+            $q->where('status', 'available');
         }])->get();
 
-        $units = ToolUnit::whereIn('status', ['available', 'maintenance', 'broken'])->get();
+        $units = ToolUnit::where('status', 'available')->get();
 
         return view('loan.index', compact('pending', 'active', 'rejected', 'items', 'units', 'role'));
     }
@@ -55,36 +76,42 @@ class LoanController extends Controller
             'notes'       => $request->notes,
             'employee_id' => auth()->id(),
         ]);
+        ToolUnit::where('code', $loan->unit_code)->update(['status' => 'lent']);
         return redirect()->back()->with('success', 'Loan approved.');
     }
 
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
         $loan = Loan::findOrFail($id);
         $loan->update([
             'status'      => 'rejected',
-            'employee_id' => auth()->id(), // catat siapa yang reject
+            'notes'       => $request->notes,
+            'employee_id' => auth()->id(),
         ]);
         return redirect()->back()->with('success', 'Loan rejected.');
     }
 
     public function return(Request $request, $id)
-{
-    $loan = Loan::findOrFail($id);
+    {
+        $request->validate([
+            'path_photo' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    $path = null;
-    if ($request->hasFile('path_photo')) {
+        $loan = Loan::findOrFail($id);
         $path = $request->file('path_photo')->store('loan_returns', 'public');
+
+        Returns::create([
+            'loan_id'     => $loan->id,
+            'return_date' => now()->toDateString(),
+            'path_photo'  => $path,
+            'notes'       => $request->notes ?? null,
+        ]);
+
+        $loan->update(['status' => 'closed']);
+
+        return redirect()->back()->with('success', 'Pengembalian berhasil diajukan.');
     }
 
-    $loan->update([
-        'status'     => 'returned',
-        'notes'      => $request->notes,
-        'path_photo' => $path,
-    ]);
-
-    return redirect()->back()->with('success', 'Loan returned successfully.');
-}
     public function destroy($id)
     {
         Loan::findOrFail($id)->delete();
@@ -93,11 +120,11 @@ class LoanController extends Controller
 
     public function edit($id)
     {
-        $loan = Loan::findOrFail($id);
+        $loan  = Loan::findOrFail($id);
         $items = Tool::whereHas('units', function ($q) {
-            $q->where('status', '!=', 'lent');
+            $q->where('status', 'available');
         })->with(['units' => function ($q) {
-            $q->where('status', '!=', 'lent');
+            $q->where('status', 'available');
         }])->get();
         return view('loan.edit', compact('loan', 'items'));
     }
@@ -105,7 +132,6 @@ class LoanController extends Controller
     public function update(Request $request, $id)
     {
         $loan = Loan::findOrFail($id);
-
         $request->validate([
             'tool_id'   => 'required|exists:tools,id',
             'unit_code' => 'required|exists:tool_units,code',
@@ -113,7 +139,6 @@ class LoanController extends Controller
             'due_date'  => 'required|date|after_or_equal:loan_date',
             'purpose'   => 'required|string|max:255',
         ]);
-
         $loan->update([
             'tool_id'   => $request->tool_id,
             'unit_code' => $request->unit_code,
@@ -121,7 +146,6 @@ class LoanController extends Controller
             'due_date'  => $request->due_date,
             'purpose'   => $request->purpose,
         ]);
-
-        return redirect()->route('loan.index')->with('success', 'Loan updated successfully!');
+        return redirect()->route('loan.index')->with('success', 'Loan updated.');
     }
 }

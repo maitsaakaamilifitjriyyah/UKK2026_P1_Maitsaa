@@ -120,13 +120,13 @@
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a class="nav-link" href="{{ route('category.index') }}">
+                                <a class="nav-link" href="{{ route('return.index') }}">
                                     <i class="fe fe-grid fe-16"></i>
-                                    <span class="ml-3 item-text">Pengembalian</span>
+                                    <span class="ml-3 item-text">Return</span>
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a class="nav-link" href="{{ route('location.index') }}">
+                                <a class="nav-link" href="{{ route('return.history') }}">
                                     <i class="fe fe-globe fe-16"></i>
                                     <span class="ml-3 item-text">History</span>
                                 </a>
@@ -143,13 +143,13 @@
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a class="nav-link" href="{{ route('category.index') }}">
+                                <a class="nav-link" href="{{ route('return.index') }}">
                                     <i class="fe fe-grid fe-16"></i>
-                                    <span class="ml-3 item-text">Pengembalian</span>
+                                    <span class="ml-3 item-text">Return</span>
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a class="nav-link" href="{{ route('location.index') }}">
+                                <a class="nav-link" href="{{ route('return.history') }}">
                                     <i class="fe fe-globe fe-16"></i>
                                     <span class="ml-3 item-text">History</span>
                                 </a>

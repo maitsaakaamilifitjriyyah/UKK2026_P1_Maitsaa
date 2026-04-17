@@ -9,16 +9,15 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
 })->name('welcome');
 
-
 Route::get('/dashboard', function () {
     $role = strtolower(auth()->user()->role);
-
     if ($role == 'admin') {
         return view('dashboard');
     } elseif ($role == 'employee') {
@@ -26,10 +25,8 @@ Route::get('/dashboard', function () {
     } elseif ($role == 'user') {
         return redirect()->route('item.index');
     }
-
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -80,7 +77,7 @@ Route::get('/unit/{code}', [UnitController::class, 'edit'])->name('unit.edit');
 Route::put('/unit/{code}', [UnitController::class, 'update'])->name('unit.update');
 Route::delete('/unit/{code}', [UnitController::class, 'destroy'])->name('unit.destroy');
 
-// Peminjaman
+// Peminjaman (Loan)
 Route::get('/loan', [LoanController::class, 'index'])->name('loan.index');
 Route::get('/loan/create', [LoanController::class, 'create'])->name('loan.create');
 Route::post('/loan', [LoanController::class, 'store'])->name('loan.store');
@@ -90,4 +87,9 @@ Route::put('/loan/{id}/approve', [LoanController::class, 'approve'])->name('loan
 Route::put('/loan/{id}/reject', [LoanController::class, 'reject'])->name('loan.reject');
 Route::put('/loan/{id}/return', [LoanController::class, 'return'])->name('loan.return');
 Route::delete('/loan/{id}', [LoanController::class, 'destroy'])->name('loan.destroy');
+
+Route::get('/returns/history', [ReturnController::class, 'history'])->name('return.history');
+Route::get('/returns', [ReturnController::class, 'index'])->name('return.index');
+Route::put('/returns/{id}/check', [ReturnController::class, 'check'])->name('return.check');
+
 require __DIR__.'/auth.php';

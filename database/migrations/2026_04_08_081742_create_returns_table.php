@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('condition_id')->references('id')->on('unit_conditions');
             $table->date('return_date')->comment('Tanggal aktual alat dikembalikan');
             $table->string('path_photo')->nullable()->comment('Foto kondisi alat saat dikembalikan');
+            $table->integer('fine_percentage')->nullable()->comment('Persentase denda');
+            $table->bigInteger('fine_amount')->nullable()->comment('Jumlah denda dalam rupiah');
             $table->text('notes')->nullable()->comment('Catatan pengembalian dari Employee');
             $table->timestamps();
         });
