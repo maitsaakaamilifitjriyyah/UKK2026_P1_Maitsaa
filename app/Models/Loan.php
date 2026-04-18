@@ -24,17 +24,22 @@ class Loan extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
+ 
+    public function employee()
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'id');
+    }
+ 
     public function item()
     {
         return $this->belongsTo(Tool::class, 'tool_id', 'id');
     }
-
+ 
     public function toolUnit()
     {
         return $this->belongsTo(ToolUnit::class, 'unit_code', 'code');
     }
-
+ 
     public function returnRecord()
     {
         return $this->hasOne(Returns::class, 'loan_id', 'id');

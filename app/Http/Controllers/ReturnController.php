@@ -7,6 +7,7 @@ use App\Models\Returns;
 use App\Models\Loan;
 use App\Models\UnitCondition;
 use App\Models\ToolUnit;
+use App\Models\ActivityLog;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -19,7 +20,7 @@ class ReturnController extends Controller
             ->latest()
             ->get();
 
-        return view('return.index', compact('returns'));
+        return view('returns.index', compact('returns'));
     }
 
     public function check(Request $request, $id)
@@ -64,9 +65,23 @@ class ReturnController extends Controller
             'broken'      => 'nonactive',
             default       => 'available',
         };
+        ToolUnit::where('code', $return->loan->unit_code)->update(['status' => $newUnitStatus]);
 
-        ToolUnit::where('code', $return->loan->unit_code)
-            ->update(['status' => $newUnitStatus]);
+        ActivityLog::record(
+            'return.checked', 'returns',
+            auth()->user()->email . ' mencatat kondisi ' . $request->conditions
+                . ' untuk pengembalian return #' . $return->id
+                . ' unit ' . $return->loan->unit_code
+                . ($fineAmount ? ' — denda Rp ' . number_format($fineAmount, 0, ',', '.') : ''),
+            [
+                'return_id'      => $return->id,
+                'loan_id'        => $return->loan_id,
+                'unit_code'      => $return->loan->unit_code,
+                'conditions'     => $request->conditions,
+                'fine_percentage'=> $finePercentage,
+                'fine_amount'    => $fineAmount,
+            ]
+        );
 
         return redirect()->back()->with('success', 'Kondisi barang berhasil dicatat.');
     }
@@ -77,13 +92,11 @@ class ReturnController extends Controller
         $userId = auth()->id();
         $isUser = $role === 'user';
 
+        // Rejected lebih dari 2 hari
         $rejectedQuery = Loan::with(['user', 'item', 'toolUnit'])
             ->where('status', 'rejected')
             ->where('updated_at', '<', Carbon::now()->subDays(2));
-
-        if ($isUser) {
-            $rejectedQuery->where('user_id', $userId);
-        }
+        if ($isUser) $rejectedQuery->where('user_id', $userId);
 
         $rejectedLoans = $rejectedQuery->latest('updated_at')->get()
             ->map(fn($loan) => [
@@ -101,9 +114,9 @@ class ReturnController extends Controller
                 'path_photo'  => null,
             ]);
 
+        // Returns yang sudah dicek
         $returnsQuery = Returns::with(['loan.user', 'loan.item', 'loan.toolUnit', 'condition'])
             ->whereNotNull('condition_id');
-
         if ($isUser) {
             $returnsQuery->whereHas('loan', fn($q) => $q->where('user_id', $userId));
         }
@@ -129,11 +142,8 @@ class ReturnController extends Controller
                 ];
             });
 
-        $history = $rejectedLoans
-            ->concat($checkedReturns)
-            ->sortByDesc('date')
-            ->values();
+        $history = $rejectedLoans->concat($checkedReturns)->sortByDesc('date')->values();
 
-        return view('return.history', compact('history', 'role'));
+        return view('returns.history', compact('history', 'role'));
     }
 }

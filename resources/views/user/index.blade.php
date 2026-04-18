@@ -6,7 +6,6 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="row">
-                        <!-- Small table -->
                         <div class="col-md-12 my-4">
                             <h2 class="h4 mb-1">Table User</h2>
                             <div class="card shadow">

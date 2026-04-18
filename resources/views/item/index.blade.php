@@ -78,7 +78,6 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <!-- table -->
                                     <table class="table table-borderless table-hover">
                                         <thead>
                                             <tr>

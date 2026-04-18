@@ -102,6 +102,12 @@
                                     <span class="ml-3 item-text">Loan</span>
                                 </a>
                             </li>
+                            <li class="nav-item w-100">
+                                <a class="nav-link" href="{{ route('log.index') }}">
+                                    <i class="fe fe-16 fe-layers"></i>
+                                    <span class="ml-3 item-text">Activity Log</span>
+                                </a>
+                            </li>
                         </ul>
                     @endif
 
