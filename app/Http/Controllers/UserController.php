@@ -3,34 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Exports\UserExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
-    /**
-     * Tampilkan semua user beserta detailnya
-     */
     public function index()
     {
-        // Menggunakan with('detail') jika ada relasi ke user_details
         $data = User::with('detail')->latest()->get();
         
         return view('user.index', compact('data'));
     }
 
-    /**
-     * Form tambah user
-     */
+    public function export()
+    {
+        return Excel::download(new UserExport, 'users_' . now()->format('Ymd_His') . '.xlsx');
+    }
+
     public function create()
     {
         return view('user.create');
     }
 
-    /**
-     * Simpan user baru
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -62,18 +59,12 @@ class UserController extends Controller
             ->with('success', 'User berhasil ditambahkan');
     }
 
-    /**
-     * Form edit user
-     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('user.create', compact('user'));
     }
 
-    /**
-     * Update user
-     */
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -115,9 +106,6 @@ class UserController extends Controller
             ->with('success', 'User berhasil diupdate');
     }
 
-    /**
-     * Hapus user
-     */
     public function destroy($id)
     {
         $user = User::findOrFail($id);

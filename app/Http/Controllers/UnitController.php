@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\ToolUnit;
 use App\Models\UnitCondition;
+use App\Exports\UnitExport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UnitController extends Controller
 {
+    public function export()
+    {
+        return Excel::download(new UnitExport, 'units_' . now()->format('Ymd_His') . '.xlsx');
+    }
+
     public function store(Request $request)
     {
         $request->validate([

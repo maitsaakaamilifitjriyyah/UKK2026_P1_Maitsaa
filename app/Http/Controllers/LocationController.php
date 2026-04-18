@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use App\Exports\LocationExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LocationController extends Controller
 {
@@ -11,6 +13,11 @@ class LocationController extends Controller
     {
         $data = Location::latest()->get();
         return view('location.index', compact('data'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new LocationExport, 'locations_' . now()->format('Ymd_His') . '.xlsx');
     }
 
     public function create()

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Loan;
 use App\Models\Tool;
 use App\Models\ToolUnit;
 use App\Models\Returns;
 use App\Models\ActivityLog;
+use App\Exports\LoanExport;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LoanController extends Controller
 {
@@ -39,6 +41,11 @@ class LoanController extends Controller
         $units = ToolUnit::where('status', 'available')->get();
 
         return view('loan.index', compact('pending', 'active', 'rejected', 'items', 'units', 'role'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new LoanExport, 'loans_' . now()->format('Ymd_His') . '.xlsx');
     }
 
     public function store(Request $request)

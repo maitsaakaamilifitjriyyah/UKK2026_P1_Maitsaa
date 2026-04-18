@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Returns;
 use App\Models\Loan;
 use App\Models\UnitCondition;
 use App\Models\ToolUnit;
 use App\Models\ActivityLog;
+use App\Exports\ReturnExport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReturnController extends Controller
 {
@@ -20,7 +22,12 @@ class ReturnController extends Controller
             ->latest()
             ->get();
 
-        return view('returns.index', compact('returns'));
+        return view('return.index', compact('returns'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new ReturnExport, 'returns_' . now()->format('Ymd_His') . '.xlsx');
     }
 
     public function check(Request $request, $id)
@@ -144,6 +151,6 @@ class ReturnController extends Controller
 
         $history = $rejectedLoans->concat($checkedReturns)->sortByDesc('date')->values();
 
-        return view('returns.history', compact('history', 'role'));
+        return view('return.history', compact('history', 'role'));
     }
 }

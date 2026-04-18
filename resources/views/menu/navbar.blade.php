@@ -104,7 +104,7 @@
                             </li>
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('log.index') }}">
-                                    <i class="fe fe-16 fe-layers"></i>
+                                    <i class="fe fe-16 fe-database"></i>
                                     <span class="ml-3 item-text">Activity Log</span>
                                 </a>
                             </li>
@@ -127,13 +127,13 @@
                             </li>
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('return.index') }}">
-                                    <i class="fe fe-grid fe-16"></i>
+                                    <i class="fe fe-download fe-16"></i>
                                     <span class="ml-3 item-text">Return</span>
                                 </a>
                             </li>
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('return.history') }}">
-                                    <i class="fe fe-globe fe-16"></i>
+                                    <i class="fe fe-file fe-16"></i>
                                     <span class="ml-3 item-text">History</span>
                                 </a>
                             </li>
@@ -150,13 +150,13 @@
                             </li>
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('return.index') }}">
-                                    <i class="fe fe-grid fe-16"></i>
+                                    <i class="fe fe-download fe-16"></i>
                                     <span class="ml-3 item-text">Return</span>
                                 </a>
                             </li>
                             <li class="nav-item w-100">
                                 <a class="nav-link" href="{{ route('return.history') }}">
-                                    <i class="fe fe-globe fe-16"></i>
+                                    <i class="fe fe-file fe-16"></i>
                                     <span class="ml-3 item-text">History</span>
                                 </a>
                             </li>

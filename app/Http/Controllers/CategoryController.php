@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Exports\CategoryExport;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -11,6 +13,11 @@ class CategoryController extends Controller
     {
         $data = Category::latest()->get();
         return view('category.index', compact('data'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new CategoryExport, 'categories_' . now()->format('Ymd_His') . '.xlsx');
     }
 
     public function create()

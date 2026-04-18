@@ -16,18 +16,22 @@
                             @endif
                             <div class="card shadow">
                                 <div class="card-body">
-                                    @if ($role === 'user')
-                                        <div class="toolbar row mb-3">
-                                            <div class="col ml-auto">
-                                                <div class="dropdown float-right">
+                                    <div class="toolbar row mb-3">
+                                        <div class="col ml-auto">
+                                            <div class="dropdown float-right">
+                                                @if ($role !== 'user')
+                                                <a href="{{ route('loan.export') }}" class="btn mb-2 btn-success">
+                                                    Export Excel
+                                                    <span class="fe fe-download fe-16"></span>
+                                                </a>
+                                                @else ($role === 'user')
                                                     <button class="btn btn-primary float-right ml-3" type="button"
                                                         data-toggle="modal" data-target="#verticalModal">Add Loan</button>
-                                                </div>
+                                                @endif
                                             </div>
                                         </div>
-                                    @endif
+                                    </div>
 
-                                    <!-- table -->
                                     @php $userRole = strtolower(auth()->user()->role); @endphp
                                     <table class="table table-bordered">
                                         <thead>

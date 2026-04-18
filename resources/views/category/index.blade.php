@@ -17,11 +17,10 @@
                                                 <div class="form-group col-auto mr-auto">
                                                 </div>
                                                 <div class="form-group col-auto">
-                                                    <label for="search" class="sr-only">Search</label>
-                                                    <input type="text" class="form-control" id="search1" value=""
-                                                        placeholder="Search">
-                                                </div>
-                                                <div class="form-group col-auto">
+                                                    <a href="{{ route('category.export') }}" class="btn mb-2 btn-success">
+                                                    Export Excel
+                                                    <span class="fe fe-download fe-16"></span>
+                                                </a>
                                                     <a href="{{ route('category.create') }}"
                                                         class="btn mb-2 btn-secondary">New
                                                         Category</a>

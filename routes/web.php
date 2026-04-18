@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/user/export', [UserController::class, 'export'])->name('user.export');
 Route::get('/user', [UserController::class, 'index'])->name('user.index');
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
 Route::post('/user', [UserController::class, 'store'])->name('user.store');
@@ -46,6 +47,7 @@ Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit'
 Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
 Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
+Route::get('/category/export', [CategoryController::class, 'export'])->name('category.export');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
@@ -53,6 +55,7 @@ Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('ca
 Route::put('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
+Route::get('/location/export', [LocationController::class, 'export'])->name('location.export');
 Route::get('/location', [LocationController::class, 'index'])->name('location.index');
 Route::get('/location/create', [LocationController::class, 'create'])->name('location.create');
 Route::post('/location', [LocationController::class, 'store'])->name('location.store');
@@ -60,6 +63,7 @@ Route::get('/location/{id}/edit', [LocationController::class, 'edit'])->name('lo
 Route::put('/location/{id}', [LocationController::class, 'update'])->name('location.update');
 Route::delete('/location/{id}', [LocationController::class, 'destroy'])->name('location.destroy');
 
+Route::get('/item/export', [ItemController::class, 'export'])->name('item.export');
 Route::get('/item', [ItemController::class, 'index'])->name('item.index');
 Route::get('/item/create', [ItemController::class, 'create'])->name('item.create');
 Route::post('/item', [ItemController::class, 'store'])->name('item.store');
@@ -68,11 +72,13 @@ Route::put('/item/{id}', [ItemController::class, 'update'])->name('item.update')
 Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('item.destroy');
 Route::get('/item/{id}', [ItemController::class, 'detail'])->name('item.detail');
 
+Route::get('/unit/export', [UnitController::class, 'export'])->name('unit.export');
 Route::post('/unit', [UnitController::class, 'store'])->name('unit.store');
 Route::get('/unit/{code}', [UnitController::class, 'edit'])->name('unit.edit');
 Route::put('/unit/{code}', [UnitController::class, 'update'])->name('unit.update');
 Route::delete('/unit/{code}', [UnitController::class, 'destroy'])->name('unit.destroy');
 
+Route::get('/loan/export', [LoanController::class, 'export'])->name('loan.export');
 Route::get('/loan', [LoanController::class, 'index'])->name('loan.index');
 Route::get('/loan/create', [LoanController::class, 'create'])->name('loan.create');
 Route::post('/loan', [LoanController::class, 'store'])->name('loan.store');
@@ -83,6 +89,7 @@ Route::put('/loan/{id}/reject', [LoanController::class, 'reject'])->name('loan.r
 Route::put('/loan/{id}/return', [LoanController::class, 'return'])->name('loan.return');
 Route::delete('/loan/{id}', [LoanController::class, 'destroy'])->name('loan.destroy');
 
+Route::get('/returns/export', [ReturnController::class, 'export'])->name('return.export');
 Route::get('/returns/history', [ReturnController::class, 'history'])->name('return.history');
 Route::get('/returns', [ReturnController::class, 'index'])->name('return.index');
 Route::put('/returns/{id}/check', [ReturnController::class, 'check'])->name('return.check');

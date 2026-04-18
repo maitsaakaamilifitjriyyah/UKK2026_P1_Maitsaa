@@ -17,6 +17,23 @@
 
                             <div class="card shadow">
                                 <div class="card-body">
+                                    @if (strtolower(auth()->user()->role) === 'employee')
+                                    <div class="toolbar">
+                                        <form class="form">
+                                            <div class="form-row">
+                                                <div class="form-group col-auto mr-auto">
+                                                </div>
+                                                <div class="form-group col-auto">
+                                                    <a href="{{ route('return.export') }}"
+                                                            class="btn mb-2 btn-success">
+                                                            Export Excel
+                                                            <span class="fe fe-download fe-16"></span>
+                                                        </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    @endif
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>

@@ -6,8 +6,10 @@ use App\Models\BundleTool;
 use App\Models\Tool;
 use App\Models\Category;
 use App\Models\Location;
+use App\Exports\ItemExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemController extends Controller
 {
@@ -15,9 +17,18 @@ class ItemController extends Controller
     {
         $role = strtolower(auth()->user()->role);
         $data = Tool::with('category', 'location', 'bundleTools')
-            ->where('item_type', '!=', 'bundle_tool') // ← tambah ini
+            ->where('item_type', '!=', 'bundle_tool')
             ->get();
         return view('item.index', compact('data', 'role'));
+    }
+
+    /**
+     * Export data item ke file Excel (.xlsx)
+     */
+    public function export()
+    {
+        $filename = 'items_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new ItemExport, $filename);
     }
 
     public function create()
@@ -54,7 +65,7 @@ class ItemController extends Controller
             'price'         => $request->price,
             'description'   => $request->description,
             'code_slug'     => $request->item_type === 'bundle'
-                ? 'BDL-' . $request->code_slug 
+                ? 'BDL-' . $request->code_slug
                 : $request->code_slug,
             'photo_path'    => $pathPoto,
             'created_at'    => now(),
@@ -76,15 +87,14 @@ class ItemController extends Controller
                     'item_type'     => 'bundle_tool',
                     'price'         => $prices[$i] ?? 0,
                     'description'   => $descs[$i]  ?? null,
-                    'code_slug'     => 'BDL-' . $request->code_slug . '-' . ($i + 1), // ← BDL prefix juga
+                    'code_slug'     => 'BDL-' . $request->code_slug . '-' . ($i + 1),
                     'photo_path'    => $pathPoto,
                     'created_at'    => now(),
                 ]);
 
-                // Simpan relasi ke tabel bundle_tools
                 BundleTool::create([
                     'bundle_id' => $item->id,
-                    'tool_id'   => $subTool->id, 
+                    'tool_id'   => $subTool->id,
                     'qty'       => $qtys[$i] ?? 1,
                 ]);
             }
@@ -117,46 +127,31 @@ class ItemController extends Controller
         ]);
 
         $data = $request->only([
-            'category_id',
-            'location_code',
-            'name',
-            'item_type',
-            'price',
-            'description',
-            'code_slug'
+            'category_id', 'location_code', 'name',
+            'item_type', 'price', 'description', 'code_slug'
         ]);
 
         if ($request->hasFile('photo_path')) {
-
             if ($item->photo_path && Storage::disk('public')->exists($item->photo_path)) {
                 Storage::disk('public')->delete($item->photo_path);
             }
-
-            $file = $request->file('photo_path');
-            $ext = $file->getClientOriginalExtension();
-
-            $filename = strtolower(str_replace(' ', '-', $request->code_slug))
-                . '-' . time()
-                . '.' . $ext;
-
+            $file     = $request->file('photo_path');
+            $ext      = $file->getClientOriginalExtension();
+            $filename = strtolower(str_replace(' ', '-', $request->code_slug)) . '-' . time() . '.' . $ext;
             $data['photo_path'] = $file->storeAs('item', $filename, 'public');
         }
 
         $item->update($data);
-
         return redirect()->route('item.index')->with('success', 'Tool successfully updated!');
     }
 
     public function destroy($id)
     {
         $item = Tool::findOrFail($id);
-
         if ($item->photo_path && Storage::disk('public')->exists($item->photo_path)) {
             Storage::disk('public')->delete($item->photo_path);
         }
-
         $item->delete();
-
         return redirect()->route('item.index')->with('success', 'Tool successfully deleted!');
     }
 
