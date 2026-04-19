@@ -11,6 +11,9 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\ActivityLogController;
+use App\Models\Tool;
+use App\Models\ToolUnit;
+use App\Models\Loan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,14 +22,26 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $role = strtolower(auth()->user()->role);
-    if ($role == 'admin') {
-        return view('dashboard');
-    } elseif ($role == 'employee') {
-        return view('dashboard');
-    } elseif ($role == 'user') {
+ 
+    if ($role === 'employee') {
+        return redirect()->route('loan.index');
+    } elseif ($role === 'user') {
         return redirect()->route('item.index');
     }
-    return view('dashboard');
+ 
+    $totalTools   = Tool::where('item_type', '!=', 'bundle_tool')->count();
+    $totalUnits   = ToolUnit::count();
+    $totalLent    = ToolUnit::where('status', 'lent')->count();
+    $totalBroken  = ToolUnit::where('status', 'nonactive')
+        ->whereHas('condition', fn($q) => $q->where('conditions', 'broken'))
+        ->count();
+    $totalPending = Loan::where('status', 'pending')->count();
+    $totalActive  = Loan::where('status', 'active')->count();
+ 
+    return view('dashboard', compact(
+        'role', 'totalTools', 'totalUnits',
+        'totalLent', 'totalBroken', 'totalPending', 'totalActive'
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
