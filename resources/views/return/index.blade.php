@@ -25,7 +25,7 @@
                                                 </div>
                                                 <div class="form-group col-auto">
                                                     <a href="{{ route('return.export') }}"
-                                                            class="btn mb-2 btn-success">
+                                                            class="btn mb-2 btn-primary">
                                                             Export Excel
                                                             <span class="fe fe-download fe-16"></span>
                                                         </a>

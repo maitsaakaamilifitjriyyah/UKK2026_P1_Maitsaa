@@ -20,7 +20,7 @@
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
                                                 @if ($role !== 'user')
-                                                <a href="{{ route('loan.export') }}" class="btn mb-2 btn-success">
+                                                <a href="{{ route('loan.export') }}" class="btn mb-2 btn-primary">
                                                     Export Excel
                                                     <span class="fe fe-download fe-16"></span>
                                                 </a>
@@ -415,6 +415,64 @@
         </div>
     </div>
     {{-- end modal return --}}
+
+    <div class="modal fade" id="editLoanModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Loan</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                </div>
+                <form id="editLoanForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label>Item</label>
+                                    <select id="editLoanItem" name="tool_id" class="form-control" required>
+                                        <option value="">-- Select Item --</option>
+                                        @foreach ($items as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Purpose</label>
+                                    <input type="text" id="editLoanPurpose" name="purpose"
+                                        class="form-control" placeholder="Add purpose">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Return Date</label>
+                                    <input type="date" id="editLoanDueDate" name="due_date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label>Unit</label>
+                                    <select id="editLoanUnit" name="unit_code" class="form-control" required>
+                                        <option value="">-- Select Unit --</option>
+                                        @foreach ($units as $unit)
+                                            <option value="{{ $unit->code }}">{{ $unit->code }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Loan Date</label>
+                                    <input type="date" id="editLoanDate" name="loan_date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         function openAcceptLoanModal(id) {

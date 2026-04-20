@@ -17,12 +17,23 @@
 
                             <div class="card shadow">
                                 <div class="card-body">
+                                    @if ($role !== 'user')
+                                    <div class="toolbar mb-3">
+                                        <div class="float-right">
+                                            <a href="{{ route('return.history.export') }}" class="btn btn-primary btn-sm">
+                                                Export Excel
+                                                <span class="fe fe-download fe-16"></span>
+                                            </a>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    @endif
+
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>Date</th>
-                                                {{-- Kolom Peminjam hanya tampil untuk employee/admin --}}
                                                 @if ($role !== 'user')
                                                     <th>Peminjam</th>
                                                 @endif
@@ -94,7 +105,6 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

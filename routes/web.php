@@ -11,6 +11,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\LaporanController;
 use App\Models\Tool;
 use App\Models\ToolUnit;
 use App\Models\Loan;
@@ -105,9 +106,16 @@ Route::put('/loan/{id}/return', [LoanController::class, 'return'])->name('loan.r
 Route::delete('/loan/{id}', [LoanController::class, 'destroy'])->name('loan.destroy');
 
 Route::get('/returns/export', [ReturnController::class, 'export'])->name('return.export');
+Route::get('/returns/history/export', [ReturnController::class, 'exportHistory'])->name('return.history.export');
 Route::get('/returns/history', [ReturnController::class, 'history'])->name('return.history');
 Route::get('/returns', [ReturnController::class, 'index'])->name('return.index');
 Route::put('/returns/{id}/check', [ReturnController::class, 'check'])->name('return.check');
 
+Route::get('/log/export', [ActivityLogController::class, 'export'])->name('log.export');
 Route::get('/log', [ActivityLogController::class, 'index'])->name('log.index');
+
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+Route::get('/laporan/peminjam', [LaporanController::class, 'exportPeminjam'])->name('laporan.peminjam');
+Route::get('/laporan/periode', [LaporanController::class, 'exportPeriode'])->name('laporan.periode');
+
 require __DIR__.'/auth.php';

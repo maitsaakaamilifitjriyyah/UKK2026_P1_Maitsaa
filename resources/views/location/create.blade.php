@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <h2 class="page-title">Form Create Location</h2>
+                    <h2 class="page-title">{{ isset($location) ? 'Edit Location' : 'Create New Location' }}</h2>
                     <div class="card shadow mb-4">
                         <div class="card-header">
                             <strong class="card-title">Create New Location</strong>
