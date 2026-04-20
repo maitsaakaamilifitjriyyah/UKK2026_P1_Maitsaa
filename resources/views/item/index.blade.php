@@ -22,7 +22,7 @@
                                                             <span class="fe fe-download fe-16"></span>
                                                         </a>
                                                         <a href="{{ route('item.create') }}"
-                                                            class="btn mb-2 btn-primary">New Item</a>
+                                                            class="btn mb-2 btn-secondary">New Item</a>
                                                     </div>
                                                 @endif
                                             </div>

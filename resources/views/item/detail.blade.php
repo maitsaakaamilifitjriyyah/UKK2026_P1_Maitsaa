@@ -49,7 +49,7 @@
                                                         style="font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px;">
                                                         Category</p>
                                                     <p class="mb-0 fw-medium" style="font-size: 16px;">
-                                                        {{ $item->category->name }}</p>
+                                                        {{ $item->category->name ?? '-' }}</p>
                                                 </div>
                                                 <div class="col-6">
                                                     <p class="mb-0"
@@ -63,40 +63,38 @@
                                                         style="font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px;">
                                                         Location</p>
                                                     <p class="mb-0 fw-medium" style="font-size: 16px;">
-                                                        {{ $item->location->name . ' - ' . $item->location->detail }}</p>
+                                                        {{ isset($item->location) ? $item->location->name . ' - ' . $item->location->detail : '-' }}</p>
                                                 </div>
                                                 <div class="col-6">
                                                     <p class="mb-0"
                                                         style="font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px;">
                                                         Description</p>
                                                     <p class="mb-0 fw-medium" style="font-size: 16px;">
-                                                        {{ $item->description }}</p>
+                                                        {{ $item->description ?? '-' }}</p>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- end section -->
+                    </div>
+
                     <div class="row">
-                        <!-- Striped rows -->
                         <div class="col-md-12 my-4">
                             <div class="card shadow">
                                 <div class="card-body">
-                                    @if($role == 'admin')
-                                    <div class="toolbar row mb-3">
-                                        <div class="col ml-auto">
-                                            <div class="dropdown float-right">
-                                                <button class="btn btn-primary float-right ml-3" type="button"
-                                                    data-toggle="modal" data-target="#verticalModal">Add Unit</button>
+                                    @if ($role == 'admin')
+                                        <div class="toolbar row mb-3">
+                                            <div class="col ml-auto">
+                                                <div class="dropdown float-right">
+                                                    <button class="btn btn-primary float-right ml-3" type="button"
+                                                        data-toggle="modal" data-target="#verticalModal">Add Unit</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     @endif
 
-                                    <!-- table -->
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr role="row">
@@ -106,7 +104,7 @@
                                                 <th>Condition</th>
                                                 <th>Notes</th>
                                                 @if ($role == 'admin')
-                                                <th>Action</th>
+                                                    <th>Action</th>
                                                 @endif
                                             </tr>
                                         </thead>
@@ -127,11 +125,13 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        @if ($unit->condition->conditions == 'good')
+                                                        {{-- FIX: pakai ?-> supaya tidak error kalau condition null --}}
+                                                        @php $cond = $unit->condition?->conditions ?? null; @endphp
+                                                        @if ($cond === 'good')
                                                             <span class="badge badge-success">Good</span>
-                                                        @elseif ($unit->condition->conditions == 'broken')
+                                                        @elseif ($cond === 'broken')
                                                             <span class="badge badge-danger">Broken</span>
-                                                        @elseif ($unit->condition->conditions == 'maintenance')
+                                                        @elseif ($cond === 'maintenance')
                                                             <span class="badge badge-warning">Maintenance</span>
                                                         @else
                                                             <span class="badge badge-secondary">Unknown</span>
@@ -139,28 +139,32 @@
                                                     </td>
                                                     <td>{{ $unit->notes ?? '-' }}</td>
                                                     @if ($role == 'admin')
-                                                    <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                            type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false">
-                                                            <span class="text-muted sr-only">Action</span>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"
-                                                                onclick="openEditModal('{{ $unit->code }}', '{{ $unit->status }}', '{{ $unit->condition->conditions ?? '' }}', '{{ $unit->notes ?? '' }}')">
-                                                                Edit
-                                                            </a>
-                                                            <a class="dropdown-item" href="#"
-                                                                onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this unit?')) { document.getElementById('delete-form-{{ $unit->code }}').submit(); }">
-                                                                Delete
-                                                            </a>
-                                                            <form id="delete-form-{{ $unit->code }}"
-                                                                action="{{ route('unit.destroy', $unit->code) }}"
-                                                                method="POST" style="display: none;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        </div>
-                                                    </td>
+                                                        <td>
+                                                            <button class="btn btn-sm dropdown-toggle more-horizontal"
+                                                                type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                <span class="text-muted sr-only">Action</span>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item" href="#"
+                                                                    onclick="openEditModal(
+                                                                        '{{ $unit->code }}',
+                                                                        '{{ $unit->status }}',
+                                                                        '{{ $unit->condition?->conditions ?? '' }}',
+                                                                        '{{ $unit->notes ?? '' }}'
+                                                                    )">Edit</a>
+                                                                <a class="dropdown-item" href="#"
+                                                                    onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this unit?')) { document.getElementById('delete-form-{{ $unit->code }}').submit(); }">
+                                                                    Delete
+                                                                </a>
+                                                                <form id="delete-form-{{ $unit->code }}"
+                                                                    action="{{ route('unit.destroy', $unit->code) }}"
+                                                                    method="POST" style="display: none;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                </form>
+                                                            </div>
+                                                        </td>
                                                     @endif
                                                 </tr>
                                             @empty
@@ -174,77 +178,77 @@
                                     </table>
                                 </div>
                             </div>
-                        </div> <!-- simple table -->
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
-    </main>
-    <div class="card-body">
-        <div class="modal fade" id="verticalModal" tabindex="-1" role="dialog" aria-labelledby="verticalModalTitle"
-            aria-hidden="true" style="display: none;">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="verticalModalTitle">Form
-                            Unit</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                        </div>
                     </div>
-                    <form action="{{ route('unit.store') }}" method="POST" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    @csrf
-                                    <div class="form-group mb-3">
-                                        <input type="hidden" name="tool_id" value="{{ $item->id }}">
-                                        <label for="simpleinput">Code</label>
-                                        <input type="text" name="code" class="form-control"
-                                            value="{{ $item->code_slug }}-{{ str_pad($item->units->count() + 1, 3, '0', STR_PAD_LEFT) }}"
-                                            readonly>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="custom-select">Status</label>
-                                        <select name="status" class="form-control" required>
-                                            <option value="">-- Select Status --</option>
-                                            <option value="available">Available</option>
-                                            <option value="nonactive">Unavailable</option>
-                                            <option value="lent">Lent</option>
-                                        </select>
-                                        @error('status')
-                                            <div class="text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div> <!-- /.col -->
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="custom-select">Condition</label>
-                                        <select id="editConditions" name="conditions" class="form-control" required>
-                                            <option value="">-- Select Condition --</option>
-                                            <option value="good">Good</option>
-                                            <option value="broken">Broken</option>
-                                            <option value="maintenance">Maintenance</option>
-                                        </select>
-                                        @error('condition')
-                                            <div class="text-danger mt-1">
-                                                {{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="simpleinput">Notes</label>
-                                        <input type="text" name="notes" class="form-control" placeholder="Add notes">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn mb-2 btn-primary">Add Unit</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
+    </main>
+
+    {{-- Modal Add Unit --}}
+    <div class="modal fade" id="verticalModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Form Unit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form action="{{ route('unit.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <input type="hidden" name="tool_id" value="{{ $item->id }}">
+                                    <label>Code</label>
+                                    <input type="text" name="code" class="form-control"
+                                        value="{{ $item->code_slug }}-{{ str_pad($item->units->count() + 1, 3, '0', STR_PAD_LEFT) }}"
+                                        readonly>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Status</label>
+                                    <select name="status" class="form-control" required>
+                                        <option value="">-- Select Status --</option>
+                                        <option value="available">Available</option>
+                                        <option value="nonactive">Unavailable</option>
+                                        <option value="lent">Lent</option>
+                                    </select>
+                                    @error('status')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label>Condition</label>
+                                    <select name="conditions" class="form-control" required>
+                                        <option value="">-- Select Condition --</option>
+                                        <option value="good">Good</option>
+                                        <option value="broken">Broken</option>
+                                        <option value="maintenance">Maintenance</option>
+                                    </select>
+                                    @error('conditions')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Notes</label>
+                                    <input type="text" name="notes" class="form-control" placeholder="Add notes">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn mb-2 btn-primary">Add Unit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+
+    {{-- Modal Edit Unit --}}
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -254,7 +258,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form id="editForm" action="" method="POST">
+                <form id="editForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -299,6 +303,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function openEditModal(code, status, conditions, notes) {
             $('#editCode').val(code);

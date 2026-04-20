@@ -28,7 +28,7 @@ class UnitController extends Controller
 
         $autoStatus = $this->resolveStatus($request->conditions, $request->status);
 
-        $unit = ToolUnit::create([
+        ToolUnit::create([
             'code'    => $request->code,
             'tool_id' => $request->tool_id,
             'status'  => $autoStatus,
@@ -37,14 +37,14 @@ class UnitController extends Controller
 
         UnitCondition::create([
             'id'          => (string) Str::uuid(),
-            'unit_code'   => $unit->code,
+            'unit_code'   => $request->code,
             'return_id'   => null,
             'conditions'  => $request->conditions,
             'notes'       => $request->notes ?? '-',
             'recorded_at' => now(),
         ]);
 
-        return redirect()->back()->with('success', 'Unit berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Unit successfully added.');
     }
 
     public function edit($code)
@@ -61,8 +61,7 @@ class UnitController extends Controller
             'notes'      => 'nullable|string|max:255',
         ]);
 
-        $unit = ToolUnit::findOrFail($code);
-
+        $unit       = ToolUnit::findOrFail($code);
         $autoStatus = $this->resolveStatus($request->conditions, $request->status);
 
         $unit->update([
@@ -79,16 +78,14 @@ class UnitController extends Controller
             'recorded_at' => now(),
         ]);
 
-        return redirect()->back()->with('success', 'Unit berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Unit successfully updated.');
     }
 
     public function destroy($code)
     {
-        $unit = ToolUnit::findOrFail($code);
         UnitCondition::where('unit_code', $code)->delete();
-        $unit->delete();
-
-        return redirect()->back()->with('success', 'Unit berhasil dihapus.');
+        ToolUnit::findOrFail($code)->delete();
+        return redirect()->back()->with('success', 'Unit successfully deleted.');
     }
 
     private function resolveStatus(string $conditions, string $requestedStatus): string
