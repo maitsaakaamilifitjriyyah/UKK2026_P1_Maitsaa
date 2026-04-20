@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Returns;
 use App\Models\Loan;
 use App\Models\UnitCondition;
 use App\Models\ToolUnit;
 use App\Models\ActivityLog;
 use App\Exports\ReturnExport;
-use Illuminate\Http\Request;
+use App\Exports\HistoryExport;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -77,29 +78,27 @@ class ReturnController extends Controller
         ActivityLog::record(
             'return.checked', 'returns',
             auth()->user()->email . ' mencatat kondisi ' . $request->conditions
-                . ' untuk pengembalian return #' . $return->id
-                . ' unit ' . $return->loan->unit_code
+                . ' untuk return #' . $return->id . ' unit ' . $return->loan->unit_code
                 . ($fineAmount ? ' — denda Rp ' . number_format($fineAmount, 0, ',', '.') : ''),
             [
-                'return_id'      => $return->id,
-                'loan_id'        => $return->loan_id,
-                'unit_code'      => $return->loan->unit_code,
-                'conditions'     => $request->conditions,
-                'fine_percentage'=> $finePercentage,
-                'fine_amount'    => $fineAmount,
+                'return_id'       => $return->id,
+                'loan_id'         => $return->loan_id,
+                'unit_code'       => $return->loan->unit_code,
+                'conditions'      => $request->conditions,
+                'fine_percentage' => $finePercentage,
+                'fine_amount'     => $fineAmount,
             ]
         );
 
         return redirect()->back()->with('success', 'Kondisi barang berhasil dicatat.');
     }
 
-    public function history()
+    private function getHistory(): array
     {
         $role   = strtolower(auth()->user()->role);
         $userId = auth()->id();
         $isUser = $role === 'user';
 
-        // Rejected lebih dari 2 hari
         $rejectedQuery = Loan::with(['user', 'item', 'toolUnit'])
             ->where('status', 'rejected')
             ->where('updated_at', '<', Carbon::now()->subDays(2));
@@ -121,7 +120,6 @@ class ReturnController extends Controller
                 'path_photo'  => null,
             ]);
 
-        // Returns yang sudah dicek
         $returnsQuery = Returns::with(['loan.user', 'loan.item', 'loan.toolUnit', 'condition'])
             ->whereNotNull('condition_id');
         if ($isUser) {
@@ -151,6 +149,19 @@ class ReturnController extends Controller
 
         $history = $rejectedLoans->concat($checkedReturns)->sortByDesc('date')->values();
 
+        return [$history, $role];
+    }
+
+    public function history()
+    {
+        [$history, $role] = $this->getHistory();
         return view('return.history', compact('history', 'role'));
+    }
+
+    public function exportHistory()
+    {
+        [$history, $role] = $this->getHistory();
+        $filename = 'history_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new HistoryExport($history, $role), $filename);
     }
 }

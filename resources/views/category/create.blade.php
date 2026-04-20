@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <h2 class="page-title">Form Create Category</h2>
+                    <h2 class="page-title">{{ isset($category) ? 'Edit Category' : 'Create New Category' }}</h2>
                     <div class="card shadow mb-4">
                         <div class="card-header">
                             <strong class="card-title">Create New Category</strong>

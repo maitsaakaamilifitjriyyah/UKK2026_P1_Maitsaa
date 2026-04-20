@@ -5,10 +5,10 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <h2 class="page-title">Form Create Item</h2>
+                <h2 class="page-title">{{ isset($item) ? 'Edit Item' : 'Create New Item' }}</h2>
                 <div class="card shadow mb-4">
                     <div class="card-header">
-                        <strong class="card-title">Create New Item</strong>
+                        <strong class="card-title">{{ isset($item) ? 'Edit Item' : 'Create New Item' }}</strong>
                     </div>
                     @if ($errors->any())
                     <div class="alert alert-danger shadow">
@@ -99,7 +99,7 @@
                                             <span class="input-group-text">Rp</span>
                                             <input type="number" name="price"
                                                 class="form-control @error('price') is-invalid @enderror"
-                                                value="{{ old('price', 0) }}"
+                                                value="{{ old('price', $item->price ?? '') }}" 
                                                 placeholder="Enter purchase price" min="0">
                                             @error('price')
                                             <div class="invalid-feedback">{{ $message }}</div>
